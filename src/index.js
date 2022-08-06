@@ -1,4 +1,4 @@
-import fs from "node:fs";
+import fs from "node:fs/promises";
 import { resolve } from "node:path";
 import { env } from "node:process";
 import yaml from "yaml";
@@ -6,16 +6,29 @@ import { convertToJSON, convertToYAML } from "./settings.js";
 
 const SettingsDir = "Microsoft/PowerToys/Keyboard Manager";
 const SettingsFilename = "default.json";
+const BackupFilename = "backup default.json";
+const YamlFilename = "Keyboard Manager Settings.yaml";
 
-const json = fs.readFileSync(resolve(env.LOCALAPPDATA, SettingsDir, SettingsFilename), "utf8");
-const kmbSettings = JSON.parse(json);
-const yamlSettings = convertToYAML(kmbSettings);
-const jsonSettings = convertToJSON(yaml.parse(yamlSettings));
+async function writeKMSettings(
+	settings)
+{
+	const json = convertToJSON(settings);
+	const settingsDir = resolve(env.LOCALAPPDATA, SettingsDir);
+	const settingsPath = resolve(settingsDir, SettingsFilename);
+	const backupPath = resolve(settingsDir, BackupFilename);
 
-console.log(json);
-console.log(jsonSettings);
+	await fs.copyFile(settingsPath, backupPath);
+	await fs.writeFile(settingsPath, json);
+}
 
-console.log(JSON.stringify(kmbSettings, null, 2));
-console.log(yamlSettings);
+//const json = fs.readFileSync(resolve(env.LOCALAPPDATA, SettingsDir, SettingsFilename), "utf8");
+//const kmbSettings = JSON.parse(json);
+//const yamlSettings = convertToYAML(kmbSettings);
+//const jsonSettings = convertToJSON(yaml.parse(yamlSettings));
 
-//fs.writeFileSync("default.json", jsonSettings);
+//fs.writeFileSync(YamlFilename, yamlSettings);
+
+const yamlSettings = await fs.readFile(YamlFilename, "utf8");
+const settings = yaml.parse(yamlSettings);
+
+await writeKMSettings(settings);
