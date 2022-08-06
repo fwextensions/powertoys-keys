@@ -32,7 +32,7 @@ export function getShortcutFromCodes(
 		.join(KeyDelimiter);
 }
 
-function getShortcutFromKeys(
+export function getShortcutFromKeys(
 	shortcut)
 {
 	return shortcut
