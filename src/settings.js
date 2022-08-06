@@ -1,26 +1,5 @@
 import yaml from "yaml";
-import { getCodeFromKey, getKeyFromCode } from "./keys.js";
-
-const SettingsKeyDelimiter = ";";
-const KeyDelimiter = " ";
-
-function convertToKeys(
-	shortcut)
-{
-	return shortcut
-		.split(SettingsKeyDelimiter)
-		.map((code) => getKeyFromCode(code))
-		.join(KeyDelimiter);
-}
-
-function convertToCodes(
-	shortcut)
-{
-	return shortcut
-		.split(KeyDelimiter)
-		.map((key) => getCodeFromKey(key))
-		.join(SettingsKeyDelimiter);
-}
+import { getShortcutFromCodes } from "./keys.js";
 
 export class Settings {
 	constructor(kmbSettings)
@@ -38,8 +17,8 @@ export class Settings {
 		targetApp})
 	{
 		const shortcut = {
-			from: convertToKeys(originalKeys),
-			to: convertToKeys(newRemapKeys),
+			from: getShortcutFromCodes(originalKeys),
+			to: getShortcutFromCodes(newRemapKeys),
 		};
 
 		if (targetApp) {

@@ -1,6 +1,8 @@
-import fs from "fs";
-import { resolve } from "path";
+import fs from "node:fs";
+import { resolve } from "node:path";
 
+const SettingsKeyDelimiter = ";";
+const KeyDelimiter = " ";
 const UnknownKey = "<Unknown Key>";
 
 const keysJSON = fs.readFileSync(resolve("src", "keys.json"), "utf8");
@@ -19,4 +21,22 @@ export function getCodeFromKey(
 	key)
 {
 	return byKey[key] ?? UnknownKey;
+}
+
+export function getShortcutFromCodes(
+	shortcut)
+{
+	return shortcut
+		.split(SettingsKeyDelimiter)
+		.map((code) => getKeyFromCode(code))
+		.join(KeyDelimiter);
+}
+
+function getShortcutFromKeys(
+	shortcut)
+{
+	return shortcut
+		.split(KeyDelimiter)
+		.map((key) => getCodeFromKey(key))
+		.join(SettingsKeyDelimiter);
 }
