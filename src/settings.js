@@ -1,6 +1,10 @@
 import yaml from "yaml";
 import { getShortcutFromCodes, getShortcutFromKeys } from "./keys.js";
 
+const AppDelimiterPattern = /\s*,\s*/;
+
+const appList = (apps) => apps.join(", ");
+
 function convertToYAMLShortcut({
 	originalKeys,
 	newRemapKeys,
@@ -18,10 +22,9 @@ function convertToYAMLShortcut({
 	return shortcut;
 }
 
-function convertToJSONShortcut({
-	from,
-	to,
-	app})
+function convertToJSONShortcut(
+	{ from, to },
+	app)
 {
 	const shortcut = {
 		originalKeys: getShortcutFromKeys(from),
@@ -38,14 +41,37 @@ function convertToJSONShortcut({
 export function convertToYAML(
 	settings)
 {
-	const { remapKeys, remapShortcuts } = settings;
+	const { remapKeys, remapShortcuts: { global, appSpecific } } = settings;
 	const yamlSettings = {
 		keys: remapKeys,
-		shortcuts: {}
+		shortcuts: {
+			global: global.map(convertToYAMLShortcut)
+		}
 	};
+	const appsByMapping = {};
+	const mappingsByApps = {};
 
-	for (const key in remapShortcuts) {
-	  yamlSettings.shortcuts[key] = remapShortcuts[key].map(convertToYAMLShortcut)
+	appSpecific.forEach((shortcut) => {
+		const { from, to, app } = convertToYAMLShortcut(shortcut);
+		const mapping = `${from}|${to}`;
+		const apps = appsByMapping[mapping] || [];
+
+		appsByMapping[mapping] = [...apps, app].sort();
+	});
+
+	for (const mapping in appsByMapping) {
+	  const apps = appList(appsByMapping[mapping]);
+		const mappings = mappingsByApps[apps] || [];
+
+		mappingsByApps[apps] = [...mappings, mapping].sort();
+	}
+
+	for (const apps in mappingsByApps) {
+	  yamlSettings.shortcuts[apps] = mappingsByApps[apps].map((mapping) => {
+			const [from, to] = mapping.split("|");
+
+			return { from, to };
+		});
 	}
 
 	return yaml.stringify(yamlSettings);
@@ -54,14 +80,24 @@ export function convertToYAML(
 export function convertToJSON(
 	settings)
 {
-	const { keys, shortcuts } = settings;
+	const { keys, shortcuts: { global, ...appShortcuts} } = settings;
 	const jsonSettings = {
 		remapKeys: keys,
-		remapShortcuts: {}
+		remapShortcuts: {
+			global: global.map((shortcut) => convertToJSONShortcut(shortcut)),
+			appSpecific: []
+		}
 	};
+	const { appSpecific } = jsonSettings.remapShortcuts;
 
-	for (const key in shortcuts) {
-	  jsonSettings.remapShortcuts[key] = shortcuts[key].map(convertToJSONShortcut)
+		// each key on appShortcuts is an array of shortcuts shared across one or
+		// more apps
+	for (const [apps, shortcuts] of Object.entries(appShortcuts)) {
+		apps.split(AppDelimiterPattern).forEach(app => {
+				// convert each shortcut back into the KBM format with the appropriate
+				// targetApp name, and add them to the list of app-specific shortcuts
+			appSpecific.push(...shortcuts.map((shortcut) => convertToJSONShortcut(shortcut, app)));
+		});
 	}
 
 	return JSON.stringify(jsonSettings);

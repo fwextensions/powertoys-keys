@@ -18,4 +18,4 @@ console.log(jsonSettings);
 console.log(JSON.stringify(kmbSettings, null, 2));
 console.log(yamlSettings);
 
-fs.writeFileSync("out.json", jsonSettings);
+//fs.writeFileSync("default.json", jsonSettings);
