@@ -1,4 +1,4 @@
-{
+export default {
 	"1": "LButton",
 	"2": "RButton",
 	"3": "Cancel",
@@ -172,4 +172,4 @@
 	"254": "OemClear",
 	"256": "<Disable>",
 	"260": "Win"
-}
+};

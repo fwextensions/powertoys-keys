@@ -1,12 +1,9 @@
-import fs from "node:fs";
-import { resolve } from "node:path";
+import byCode from "./key-codes.js";
 
 const SettingsKeyDelimiter = ";";
 const KeyDelimiter = " ";
 const UnknownKey = "<Unknown Key>";
 
-const keysJSON = fs.readFileSync(resolve("src", "keys.json"), "utf8");
-const byCode = JSON.parse(keysJSON);
 const byKey = Object.fromEntries(
 	Object.entries(byCode).map(([code, key]) => [key, code])
 );
