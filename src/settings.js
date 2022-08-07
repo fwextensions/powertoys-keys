@@ -42,10 +42,15 @@ function convertToJSONShortcut(
 export function convertToYAML(
 	settings)
 {
-	const { remapKeys, remapShortcuts: { global, appSpecific } } = settings;
+	const {
+		remapKeys: { inProcess = [] },
+		remapShortcuts: { global = [], appSpecific = [] }
+	} = settings;
 	const yamlSettings = {
 		version: Version,
-		keys: remapKeys,
+		keys: {
+			inProcess: inProcess.map(convertToYAMLShortcut)
+		},
 		shortcuts: {
 			global: global.map(convertToYAMLShortcut)
 		},
@@ -82,11 +87,16 @@ export function convertToYAML(
 export function convertToJSON(
 	settings)
 {
-	const { keys, shortcuts: { global, ...appShortcuts} } = settings;
+	const {
+		keys: { inProcess },
+		shortcuts: { global, ...appShortcuts }
+	} = settings;
 	const jsonSettings = {
-		remapKeys: keys,
+		remapKeys: {
+			inProcess: (inProcess || []).map((shortcut) => convertToJSONShortcut(shortcut)),
+		},
 		remapShortcuts: {
-			global: global.map((shortcut) => convertToJSONShortcut(shortcut)),
+			global: (global || []).map((shortcut) => convertToJSONShortcut(shortcut)),
 			appSpecific: []
 		}
 	};

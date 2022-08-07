@@ -21,14 +21,15 @@ async function writeKMSettings(
 	await fs.writeFile(settingsPath, json);
 }
 
-//const json = fs.readFileSync(resolve(env.LOCALAPPDATA, SettingsDir, SettingsFilename), "utf8");
+//const json = await fs.readFile(resolve(env.LOCALAPPDATA, SettingsDir, SettingsFilename), "utf8");
 //const kmbSettings = JSON.parse(json);
 //const yamlSettings = convertToYAML(kmbSettings);
 //const jsonSettings = convertToJSON(yaml.parse(yamlSettings));
 
-//fs.writeFileSync(YamlFilename, yamlSettings);
+//await fs.writeFile(YamlFilename, yamlSettings);
 
 const yamlSettings = await fs.readFile(YamlFilename, "utf8");
 const settings = yaml.parse(yamlSettings);
 
 await writeKMSettings(settings);
+console.log('Now open PowerToys, click "Keyboard Manager", click "Remap a Shortcut", and then click "OK" to apply these changes.');
