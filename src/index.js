@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import fsp from "node:fs/promises";
 import fs from "node:fs";
 import { resolve } from "node:path";
