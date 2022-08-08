@@ -2,6 +2,7 @@ import byCode from "./key-codes.js";
 
 const SettingsKeyDelimiter = ";";
 const KeyDelimiter = " ";
+const KeyDelimiterPattern = /\s+/;
 const UnknownKey = "<Unknown Key>";
 
 const byKey = Object.fromEntries(
@@ -33,7 +34,7 @@ export function getShortcutFromKeys(
 	shortcut)
 {
 	return shortcut
-		.split(KeyDelimiter)
+		.split(KeyDelimiterPattern)
 		.map((key) => getCodeFromKey(key))
 		.join(SettingsKeyDelimiter);
 }
