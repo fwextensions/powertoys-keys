@@ -3,7 +3,12 @@ import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import yaml from "yaml";
 import { convertToJSON, convertToYAML } from "./settings.js";
-import { SettingsFilename, BackupFilename, Messages } from "./constants.js";
+import {
+	SettingsFilename,
+	BackupFilename,
+	Messages,
+	OriginalBackupFilename
+} from "./constants.js";
 
 export async function writeYamlSettings({
 	settingsDirPath,
@@ -28,6 +33,11 @@ export async function writeKMSettings({
 	const json = convertToJSON(settings);
 	const settingsPath = resolve(settingsDirPath, SettingsFilename);
 	const backupPath = resolve(settingsDirPath, BackupFilename);
+	const originalPath = resolve(settingsDirPath, OriginalBackupFilename);
+
+	if (!existsSync(originalPath)) {
+		await fs.copyFile(settingsPath, originalPath);
+	}
 
 	await fs.copyFile(settingsPath, backupPath);
 	await fs.writeFile(settingsPath, json);
