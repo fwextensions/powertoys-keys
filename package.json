@@ -6,9 +6,9 @@
   "license": "MIT",
   "bin": "./src/index.js",
   "type": "module",
-  "scripts": {
-  },
+  "scripts": {},
   "dependencies": {
+    "minimist": "^1.2.6",
     "yaml": "^2.1.1"
   }
 }
