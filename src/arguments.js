@@ -1,5 +1,7 @@
 import parseArgs from "minimist";
-import { Commands, SettingsDirPath, YamlFilename } from "./constants.js";
+import { Commands, DefaultSettingsDirPath, DefaultYamlFilename } from "./constants.js";
+
+const YamlExtensionPattern = /\.yaml$/;
 
 const list = (items) => items.join(", ");
 
@@ -21,8 +23,12 @@ export default function getArgs(
 		throw new Error(`Found unsupported command: "${command}". Must be one of "${list(Commands.All)}".`);
 	}
 
-	args.flags.settingsDirPath = flags["settings-dir"] || SettingsDirPath;
-	args.flags.yamlPath = flags["yaml"] || YamlFilename;
+	args.flags.settingsDirPath = flags["settings-dir"] || DefaultSettingsDirPath;
+	args.flags.yamlPath = flags["yaml-file"] || DefaultYamlFilename;
+
+	if (!YamlExtensionPattern.test(args.flags.yamlPath)) {
+		args.flags.yamlPath += ".yaml";
+	}
 
 	return args;
 }
