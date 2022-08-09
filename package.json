@@ -6,7 +6,10 @@
   "license": "MIT",
   "bin": "./src/index.js",
   "type": "module",
-  "scripts": {},
+  "scripts": {
+		"export": "node src/index.js export",
+		"import": "node src/index.js import"
+	},
   "dependencies": {
     "minimist": "^1.2.6",
     "yaml": "^2.1.1"

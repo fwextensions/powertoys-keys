@@ -5,7 +5,7 @@
 
 ## Usage
 
-`powertoys-keys` requires that [Node.js](https://nodejs.org/en/download/) is installed on your computer.  
+`powertoys-keys` requires [Node.js](https://nodejs.org/en/download/) to be installed on your computer.  
 
 Open a Windows Terminal in a directory where you want to store your editable keyboard shortcuts file.  Then run:
 
@@ -45,7 +45,7 @@ The shortcut mappings are grouped by the applications they apply to, under the `
 
 #### Multi-app shortcuts
 
-Besides specifying a single app, the app list can start with a quoted, comma-delimited list of multiple app names.  In this example, all of the shortcuts in the `"chrome, firefox, msedge":` list apply to Chrome, Firefox and Microsoft Edge:  
+Besides specifying a single app, the app list can be a quoted, comma-delimited list of multiple app names.  In this example, all of the shortcuts in the `"chrome, firefox, msedge":` list apply to Chrome, Firefox and Microsoft Edge:  
 
 ```yaml
   "chrome, firefox, msedge":
@@ -70,14 +70,14 @@ Each list name has to be unique, but the same app can appear in multiple lists. 
       to: LCtrl LShift O
 ```
 
-Note that when the YAML file is imported into *Keyboard Manager*, all of the shortcuts in a multi-app list are duplicated, once for each app, since *PowerToys* doesn't natively support this feature.  This means that if you have 20 shortcuts in a list for 10 apps, **200** individual shortcuts will be shown in *Keyboard Manager* UI.  So don't go too crazy with lots of shortcuts!
+Note that when the YAML file is imported into *Keyboard Manager*, all of the shortcuts in a multi-app list are duplicated, once for each app, since *PowerToys* doesn't natively support this feature.  This means that if you have 20 shortcuts in a list for 10 apps, **200** individual shortcuts will be shown in *Keyboard Manager* UI.  So don't go too crazy with lots of shared shortcuts!
 
 
 ### Shortcut mappings
 
 Each mapping is defined using an object with `from` and `to` fields.  For instance, in the `notepad:` list above, the shortcut <kbd>Alt (Left)</kbd><kbd>S</kbd> is mapped to <kbd>Ctrl (Left)</kbd><kbd>S</kbd>.  Pressing the `from` shortcut triggers the `to` shortcut in the app.  (The `-` before each `from` indicates that the `from/to` object is part of a list.)
 
-Each shortcut is defined by one or more keys, separated by spaces.  The raw key codes used in the Keyboard Manager JSON file are mapped to human-readable key names in the YAML file.  [See the full list ](src/key-codes.js) for the available key names.  
+Each shortcut is defined by one or more keys, separated by spaces.  The raw key codes used in the *Keyboard Manager* JSON file are mapped to human-readable key names in the YAML file.  [See the full list ](src/key-codes.js) for the available key names.  
 
 Modifiers, like <kbd>alt</kbd> or <kbd>ctrl</kbd>, have names that specify the left modifier key (`LAlt`), the right (`RAlt`) or either (`Alt`).  Key names are currently case-sensitive, so they must be typed exactly as shown in the [list](src/key-codes.js).
 
@@ -92,11 +92,11 @@ Once you have created the desired list of shortcuts, you must import them into *
 npx powertoys-keys import
 ```
 
-This converts your YAML file back into the required JSON format, substituting codes for the key names and exploding multi-app shortcuts into individual entries.  
+This converts your YAML file back into the required JSON format, substituting codes for the key names and expanding multi-app shortcuts into individual entries.  
 
 Unfortunately, this won't automatically apply the new settings.  To do that you must open *PowerToys*, then click *Keyboard Manager* in the left column, and then click the *Remap a shortcut* button.  After the *Remap shortcuts* dialog opens, click *OK* to apply the new shortcuts. 
 
-Note that the new JSON file completely replaces the existing settings, which means that if you remove a shortcut in the YAML file, it will be deleted from *Keyboard Manager* once you run the `import` command.  However, the script backs up the current JSON file as `default-backup.json` in the *Keyboard Manager* settings directory (usually `%LocalAppData%\Microsoft\PowerToys\Keyboard Manager`).  It also creates a `default-original.json` backup the first time it runs, so you can get back to the settings you started with, if necessary.
+Note that the new JSON file completely replaces the existing settings, which means that if you remove a shortcut in the YAML file, it will also be deleted from *Keyboard Manager* once you run the `import` command.  However, the script backs up the current JSON file as `default-backup.json` in the *Keyboard Manager* settings directory (usually `%LocalAppData%\Microsoft\PowerToys\Keyboard Manager`).  It also creates a `default-original.json` backup the first time it runs, so you can get back to the settings you started with, if necessary.
 
 
 ### International keyboards
