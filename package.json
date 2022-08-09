@@ -1,15 +1,19 @@
 {
-  "name": "powertoys-kbm-cli",
+  "name": "powertoys-keys",
   "version": "0.0.1",
   "description": "A tool for setting shortcuts in the PowerToys Keyboard Manager.",
-  "author": "John Dunning",
+  "author": "John Dunning (https://github.com/fwextensions)",
+  "repository": "github:fwextensions/powertoys-keys",
   "license": "MIT",
-  "bin": "./src/index.js",
   "type": "module",
+  "bin": "src/index.js",
+  "files": [
+    "src"
+  ],
   "scripts": {
-		"export": "node src/index.js export",
-		"import": "node src/index.js import"
-	},
+    "export": "node src/index.js export",
+    "import": "node src/index.js import"
+  },
   "dependencies": {
     "minimist": "^1.2.6",
     "yaml": "^2.1.1"
