@@ -1,15 +1,17 @@
 {
   "name": "powertoys-kbm-cli",
   "version": "0.0.1",
-  "description": "A tool for setting shortcuts in PowerToys Keyboard Manager.",
+  "description": "A tool for setting shortcuts in the PowerToys Keyboard Manager.",
   "author": "John Dunning",
   "license": "MIT",
-  "main": "index.js",
+  "bin": "./src/index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+		"export": "node src/index.js export",
+		"import": "node src/index.js import"
+	},
   "dependencies": {
+    "minimist": "^1.2.6",
     "yaml": "^2.1.1"
   }
 }
